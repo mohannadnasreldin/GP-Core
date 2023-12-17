@@ -1,50 +1,39 @@
-from rest_framework import generics, permissions
+# yourapp/views.py
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-from .models import CustomUser
-from .serializers import CustomUserSerializer
-from django.contrib.auth import authenticate, login
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from .models import CustomUser
-from .serializers import CustomUserSerializer
-from django.db import IntegrityError
 
-class AdminOnlyPermission(permissions.BasePermission):
-    message = "You do not have permission to access this resource."
+from authentication.models import CustomUser
+from .serializers import CustomUserSerializer
+from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 
-    def has_permission(self, request, view):
-        # Allow only admin to list users
-        return request.user and request.user.is_authenticated and request.user.user_type == 'admin'
 
 class RegisterUser(APIView):
-    permission_classes = (AllowAny,)
-
     def post(self, request, format='json'):
-        serializer = CustomUserSerializer(data=request.data)
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except IntegrityError:
-            return Response({'error': 'User with this username or email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if the 'password' field is present in the request data
+        if 'password' in request.data:
+            # Hash the password before saving the user
+            request.data['password'] = make_password(request.data['password'])
 
+            serializer = CustomUserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"password": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
 class LoginUser(APIView):
-    permission_classes = (AllowAny,)
-
     def post(self, request, format='json'):
         username = request.data.get('username', None)
         password = request.data.get('password', None)
-        user = authenticate(request, username=username, password=password)
+        
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            user = None
 
-        if user is not None:
-            login(request, user)
-            serializer = CustomUserSerializer(user)
-            return Response(serializer.data)
+        if user is not None and check_password(password, user.password):
+            return Response({'success': 'Login successful'})
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
