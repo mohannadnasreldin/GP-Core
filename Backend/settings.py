@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'authentication',
     'corsheaders',
+    'menu',
+    'ml',
 
 ]
 
@@ -55,7 +57,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Backend.urls'
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 TEMPLATES = [
@@ -85,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'GP',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -174,6 +176,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     'rest_framework',
 #     'rest_framework.authtoken',
 #     'authentication',
+#     'ml', 
 # ]
 
 # MIDDLEWARE = [
@@ -270,5 +273,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# AUTH_USER_MODEL = 'authentication.CustomUser'
-
+AUTH_USER_MODEL = 'authentication.CustomUser'
