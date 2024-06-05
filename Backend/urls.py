@@ -7,6 +7,6 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),
     path('profile/', include('user_profile.urls')),
     path('menu/', include('menu.urls')),
-    path('ml/', include('ml.urls')),
+    #path('ml/', include('ml.urls')),
     path('', include('cart.urls')),
 ]

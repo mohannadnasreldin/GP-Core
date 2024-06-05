@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'corsheaders',
     'menu',
-    'ml',
+    #'ml',
     'cart',
 
 ]
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'GP',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -226,7 +226,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'GP',
 #         'USER': 'postgres',
-#         'PASSWORD': '123', 
+#         'PASSWORD': '1234', 
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
