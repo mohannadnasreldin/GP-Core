@@ -1,4 +1,5 @@
 # yourapp/views.py
+import email
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -23,17 +24,34 @@ class RegisterUser(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"password": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+# class LoginUser(APIView):
+#     def post(self, request, format='json'):
+#         email = request.data.get('email', None)
+#         password = request.data.get('password', None)
+        
+#         try:
+#             user = CustomUser.objects.get(email=email)
+#         except CustomUser.DoesNotExist:
+#             user = None
+
+#         if user is not None and check_password(password, user.password):
+#             return Response({'success': 'Login successful'})
+#         else:
+#             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 class LoginUser(APIView):
     def post(self, request, format='json'):
-        username = request.data.get('username', None)
+        email = request.data.get('email', None)
         password = request.data.get('password', None)
         
+        
         try:
-            user = CustomUser.objects.get(username=username)
+            user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             user = None
 
-        if user is not None and check_password(password, user.password):
-            return Response({'success': 'Login successful'})
-        else:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        if user is not None:
+            if check_password(password, user.password):
+                return Response({'success': 'Login successful'})
+        
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+

@@ -8,5 +8,6 @@ urlpatterns = [
     path('profile/', include('user_profile.urls')),
     path('menu/', include('menu.urls')),
     #path('ml/', include('ml.urls')),
-    path('', include('cart.urls')),
+    path('cart/', include('cart.urls')),
+    path('preference/', include('preference.urls')),
 ]
